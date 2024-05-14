@@ -1,0 +1,432 @@
+{
+	"info": {
+		"_postman_id": "4c21a2c2-d118-483e-9853-70c18971a532",
+		"name": "Prex",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "8339854",
+		"_collection_link": "https://paradox-lab.postman.co/workspace/Rumbo~ac08bc61-400a-4c56-8fbf-9625c83fedaf/collection/8339854-4c21a2c2-d118-483e-9853-70c18971a532?action=share&source=collection_link&creator=8339854"
+	},
+	"item": [
+		{
+			"name": "auth",
+			"item": [
+				{
+					"name": "register",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "grant_type",
+									"value": "password",
+									"type": "text"
+								},
+								{
+									"key": "client_id",
+									"value": "1",
+									"type": "text"
+								},
+								{
+									"key": "client_secret",
+									"value": "lZ3NYgg4xM2j6RJFFfv6XhBWyo18o1cGfLx1Tars",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "tinobreg@gmail.com",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "123456",
+									"type": "text"
+								},
+								{
+									"key": "name",
+									"value": "Martin",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://api.prex.local/api/register",
+							"protocol": "http",
+							"host": [
+								"api",
+								"prex",
+								"local"
+							],
+							"path": [
+								"api",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonResponse = JSON.parse(responseBody);",
+									"var accessToken = jsonResponse.data.access_token;",
+									"",
+									"postman.setGlobalVariable(\"access_token\", accessToken)"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "grant_type",
+									"value": "password",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "client_id",
+									"value": "2",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "client_secret",
+									"value": "YBT0JBB1zqAS6ufUYRMGIYLQBHmMg52mL1vGdwPX",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "email",
+									"value": "tinobreg@gmail.com",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "123456",
+									"type": "text"
+								},
+								{
+									"key": "name",
+									"value": "Martin",
+									"type": "text",
+									"disabled": true
+								}
+							]
+						},
+						"url": {
+							"raw": "http://api.prex.local/api/login",
+							"protocol": "http",
+							"host": [
+								"api",
+								"prex",
+								"local"
+							],
+							"path": [
+								"api",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"followRedirects": false
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://api.prex.local/api/user",
+							"protocol": "http",
+							"host": [
+								"api",
+								"prex",
+								"local"
+							],
+							"path": [
+								"api",
+								"user"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "gif",
+			"item": [
+				{
+					"name": "search",
+					"protocolProfileBehavior": {
+						"followRedirects": false,
+						"followAuthorizationHeader": false
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "",
+								"value": "",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "http://api.prex.local/api/gifs/search?q=dog",
+							"protocol": "http",
+							"host": [
+								"api",
+								"prex",
+								"local"
+							],
+							"path": [
+								"api",
+								"gifs",
+								"search"
+							],
+							"query": [
+								{
+									"key": "q",
+									"value": "dog"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "view",
+					"protocolProfileBehavior": {
+						"followRedirects": false,
+						"followAuthorizationHeader": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "",
+								"value": "",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "http://api.prex.local/api/gifs/3o7527pa7qs9kCG78A",
+							"protocol": "http",
+							"host": [
+								"api",
+								"prex",
+								"local"
+							],
+							"path": [
+								"api",
+								"gifs",
+								"3o7527pa7qs9kCG78A"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "add-favourite",
+					"protocolProfileBehavior": {
+						"followRedirects": false
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "",
+								"value": "",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "gif_id",
+									"value": "3o7527pa7qs9kCG78A",
+									"type": "text"
+								},
+								{
+									"key": "alias",
+									"value": "UnoDosTres",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://api.prex.local/api/gifs/fav",
+							"protocol": "http",
+							"host": [
+								"api",
+								"prex",
+								"local"
+							],
+							"path": [
+								"api",
+								"gifs",
+								"fav"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "GIPHY",
+			"item": [
+				{
+					"name": "GIPHY List",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "api_key",
+								"value": "TQyS6YahbXzyUFYe1zwZ3y62qastdiCt",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "api.giphy.com/v1/gifs/search?api_key=TQyS6YahbXzyUFYe1zwZ3y62qastdiCt&q=dog",
+							"host": [
+								"api",
+								"giphy",
+								"com"
+							],
+							"path": [
+								"v1",
+								"gifs",
+								"search"
+							],
+							"query": [
+								{
+									"key": "api_key",
+									"value": "TQyS6YahbXzyUFYe1zwZ3y62qastdiCt"
+								},
+								{
+									"key": "q",
+									"value": "dog"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GIPHY View",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "api_key",
+								"value": "TQyS6YahbXzyUFYe1zwZ3y62qastdiCt",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "api.giphy.com/v1/gifs/3o7527pa7qs9kCG78A?api_key=TQyS6YahbXzyUFYe1zwZ3y62qastdiCt",
+							"host": [
+								"api",
+								"giphy",
+								"com"
+							],
+							"path": [
+								"v1",
+								"gifs",
+								"3o7527pa7qs9kCG78A"
+							],
+							"query": [
+								{
+									"key": "api_key",
+									"value": "TQyS6YahbXzyUFYe1zwZ3y62qastdiCt"
+								},
+								{
+									"key": "q",
+									"value": "dog",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "access_token",
+			"value": " "
+		}
+	]
+}
