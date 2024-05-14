@@ -1,0 +1,43 @@
+version: '3.2'
+
+services:
+  nginx:
+    build:
+      dockerfile: Dockerfile-nginx
+      context: .
+    ports:
+      - "80:80"
+      - "1080:1080"
+      - "3000:3000"
+    hostname: prex.local
+    networks:
+      default:
+        aliases:
+          - api.prex.local
+    links:
+      - phpfpm
+    volumes:
+      - ./nginx/prex.conf:/etc/nginx/conf.d/prex.conf
+      - .:/app
+  phpfpm:
+    build:
+      dockerfile: Dockerfile-fpm
+      context: .
+    ports:
+      - "9000:9000"
+    working_dir: /app/api
+    volumes:
+      - .:/app
+    links:
+      - mysql
+  mysql:
+    image: mariadb:10.2
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=123
+      - MYSQL_DATABASE=prex
+      - MYSQL_USER=prex
+      - MYSQL_PASSWORD=123
+    volumes:
+      - ./data:/var/lib/mysql

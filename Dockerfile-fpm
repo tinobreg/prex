@@ -1,0 +1,98 @@
+FROM php:8.2-fpm-alpine3.17
+RUN echo "ipv6" >> /etc/modules
+RUN apk add git
+RUN apk add --no-cache --virtual .phpize-deps $PHPIZE_DEPS && \
+    apk add --update --virtual .pecl-build-deps \
+	icu-dev \
+	curl-dev \
+	freetype-dev \
+	pcre-dev \
+	postgresql-dev \
+	libtool \
+	libjpeg-turbo-dev \
+	libpng-dev \
+	oniguruma-dev \
+	libxml2-dev && \
+    apk add \
+	git \
+	curl \
+	bash \
+	bash-completion \
+	icu \
+	vim \
+	pcre \
+	sqlite \
+	freetype \
+	libintl \
+	libjpeg-turbo \
+	libpng \
+	libltdl \
+	libxml2 \
+	libzip-dev \
+	mysql-client \
+	nodejs && \
+    export CFLAGS="$PHP_CFLAGS" CPPFLAGS="$PHP_CPPFLAGS" LDFLAGS="$PHP_LDFLAGS" && \
+    pecl install \
+	apcu \
+	redis \
+	zip \
+    docker-php-ext-enable redis && \
+    docker-php-ext-enable apcu && \
+    docker-php-ext-configure gd \
+	--with-freetype \
+	--with-jpeg && \
+    docker-php-ext-configure bcmath && \
+    docker-php-ext-install \
+	soap \
+	zip \
+	curl \
+	bcmath \
+	exif \
+	gd \
+	#iconv \
+	intl \
+	mbstring \
+	pdo \
+	pdo_mysql \
+	mysqli \
+	opcache && \
+	apk del \
+	.pecl-build-deps .phpize-deps
+
+RUN docker-php-ext-enable mysqli
+
+RUN apk add --update nodejs npm
+RUN npm install -g \
+	less \
+	bower \
+	lesshint \
+	uglify-js \
+	coffeescript \
+	uglifycss
+
+RUN echo 'max_execution_time = 300' >> /usr/local/etc/php/conf.d/docker-php-maxexectime.ini;
+RUN echo 'memory_limit = -1' >> /usr/local/etc/php/conf.d/docker-php-memorylimit.ini;
+
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+
+
+ARG USER_ID
+ARG GROUP_ID
+
+# Me bajo groupmod y usermod y los uso para cambiarle el id de grupo y de usuario a www-data
+# por los ids del usuario que recibimos por parametro
+RUN echo http://dl-2.alpinelinux.org/alpine/edge/community/ >> /etc/apk/repositories
+RUN apk --no-cache add shadow && usermod -u $USER_ID www-data && groupmod -g $GROUP_ID www-data
+
+# Le doy shell al usuario www-data
+RUN sed 's/www\-data\:\/bin\/bash/www-data\:\/bin\/sh/g' /etc/passwd > /etc/passwd.new
+RUN mv /etc/passwd.new /etc/passwd
+
+USER www-data
+
+##WORKDIR /app/api
+##COPY --chown=www-data:www-data ./api ./
+
+
+#RUN composer install --prefer-dist --optimize-autoloader && \
+#    composer clear-cache
